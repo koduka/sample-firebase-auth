@@ -1,0 +1,31 @@
+services:
+  node:
+    build: ./docker/node
+    tty: true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./web:/node/web
+    working_dir: /node/web
+    networks:
+      - defaults
+  firebase:
+    build: ./docker/firebase
+    volumes:
+      - ./.firebaserc:/opt/firebase/.firebaserc
+      - ./firebase.json:/opt/firebase/firebase.json
+      - ./firestore.indexes.json:/opt/firebase/firestore.indexes.json
+      - ./firestore.rules:/opt/firebase/firestore.rules
+      - ./docker/firebase/bin/:/root/.cache:cached
+      - ./docker/firebase/config/:/root/.config:cached
+    ports:
+      - 9099:9099 # Firebase Authentication
+      - 8080:8080 # Cloud Firestore
+      - 4000:4000 # Emulator Suite UI
+    working_dir: /opt/firebase
+    command: firebase emulators:start
+    networks:
+      - defaults
+
+networks:
+  defaults:
