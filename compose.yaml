@@ -7,8 +7,6 @@ services:
     volumes:
       - ./web:/node/web
     working_dir: /node/web
-    networks:
-      - defaults
   firebase:
     build: ./docker/firebase
     volumes:
@@ -25,8 +23,3 @@ services:
       - 4000:4000 # Emulator Suite UI
     working_dir: /opt/firebase
     command: firebase emulators:start
-    networks:
-      - defaults
-
-networks:
-  defaults:
